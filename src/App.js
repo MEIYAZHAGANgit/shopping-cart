@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Product from './Product';
+import ShoppingCart from './ShoppingCart';
+import './App.css'; // Import a CSS file for styling
 
-function App() {
+const App = () => {
+  const [products] = useState([
+    { id: 1, name: 'Product A', price: 19.99 },
+    { id: 2, name: 'Product B', price: 29.99 },
+    { id: 3, name: 'Product C', price: 39.99 },
+  ]);
+
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  const removeFromCart = (productId) => {
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    setCart(updatedCart);
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="products">
+        <h2>Available Products</h2>
+        {products.map((product) => (
+          <Product key={product.id} product={product} onAddToCart={addToCart} />
+        ))}
+      </div>
+      <ShoppingCart cart={cart} onRemoveFromCart={removeFromCart} onClearCart={clearCart} />
     </div>
   );
-}
+};
 
 export default App;
